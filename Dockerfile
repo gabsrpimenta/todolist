@@ -1,20 +1,15 @@
-# ETAPA 1: Build (Utiliza imagem oficial do Maven com Java 17)
-FROM maven:3.8.4-openjdk-17 AS build
-
-# Copia todo o código-fonte para dentro do container
+# ETAPA 1: Build
+FROM maven:3.8.5-openjdk-17 AS build
+WORKDIR /app
 COPY . .
-
-# Compila o projeto gerando o .jar e ignora a execução dos testes no build
 RUN mvn clean package -DskipTests
 
-# ETAPA 2: Runtime (Imagem leve e oficial do Java 17)
+# ETAPA 2: Runtime
 FROM eclipse-temurin:17-jre
-
-# Expõe a porta 8080
+WORKDIR /app
 EXPOSE 8080
 
-# Copia o .jar gerado na etapa de build
-COPY --from=build /target/todolist-1.0.0.jar app.jar
+# Copia qualquer arquivo .jar gerado na pasta target
+COPY --from=build /app/target/*.jar app.jar
 
-# Comando de inicialização
-ENTRYPOINT ["java", "-jar", "app.jar"]"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
