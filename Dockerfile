@@ -7,8 +7,8 @@ COPY . .
 # Compila o projeto gerando o .jar e ignora a execução dos testes no build
 RUN mvn clean package -DskipTests
 
-# ETAPA 2: Runtime (Imagem leve apenas para rodar a aplicação)
-FROM openjdk:17-jdk-slim
+# ETAPA 2: Runtime (Imagem leve e oficial do Java 17)
+FROM eclipse-temurin:17-jre
 
 # Expõe a porta 8080
 EXPOSE 8080
@@ -17,4 +17,4 @@ EXPOSE 8080
 COPY --from=build /target/todolist-1.0.0.jar app.jar
 
 # Comando de inicialização
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]"]
